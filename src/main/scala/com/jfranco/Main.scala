@@ -1,11 +1,13 @@
 package com.jfranco
 
-import cats.effect.IO
-import io.circe.generic.auto._
-import org.http4s.circe.CirceEntityCodec._
-import org.http4s.dom.FetchClientBuilder
+import cats.effect.*
 import tyrian.Html.*
 import tyrian.*
+import tyrian.cmds.*
+
+import io.circe.generic.auto.*
+import org.http4s.circe.CirceEntityCodec.*
+import org.http4s.dom.FetchClientBuilder
 
 import scala.scalajs.js.annotation.*
 
@@ -19,7 +21,7 @@ object Main extends TyrianIOApp[Msg, Model]:
 
   def update(model: Model): Msg => (Model, Cmd[IO, Msg]) =
     case Msg.UpdateRepo(r) =>
-      (model.copy(repo = r), Cmd.None)
+      (model, Logger.info(r))
 
     case Msg.FetchStars =>
       (
