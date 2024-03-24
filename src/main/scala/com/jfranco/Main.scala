@@ -21,7 +21,12 @@ object Main extends TyrianIOApp[Msg, Model]:
 
   def update(model: Model): Msg => (Model, Cmd[IO, Msg]) =
     case Msg.UpdateRepo(r) =>
-      (model, Logger.info(r))
+      (
+        model,
+        Cmd.SideEffect {
+          IO.println(s"Repo updated to $r")
+        } |+| Logger.info(r)
+      )
 
     case Msg.FetchStars =>
       (
@@ -80,4 +85,4 @@ object Http4sHelper:
           case Left(_)            => s"Not found :("
         }
 
-    Cmd.Run(fetchRepo)(s => Msg.Stars(s))
+    Cmd.Run(IO.println(s"Fetching stars...") *> fetchRepo)(s => Msg.Stars(s))
