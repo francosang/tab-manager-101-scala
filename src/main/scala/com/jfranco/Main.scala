@@ -42,7 +42,8 @@ object Main extends TyrianIOApp[Msg, Model]:
   def view(model: Model): Html[Msg] =
     div(
       div(
-        p("How many stars?"),
+        h1(cls := "text-3xl font-bold underline")("Http4s Stars"),
+        p(cls := "underline")("How many stars?"),
         br,
         input(
           placeholder := "http4s/http4s",
