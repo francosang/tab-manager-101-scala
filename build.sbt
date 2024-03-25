@@ -1,20 +1,16 @@
-import scala.sys.process._
 import scala.language.postfixOps
 
-import sbtwelcome._
+import sbtwelcome.*
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.5.0"
 
-lazy val tyrianuitest =
+lazy val root =
   (project in file("."))
     .enablePlugins(ScalaJSPlugin)
     .settings( // Normal settings
-      name         := "Tyrian App - POC",
-      version      := "0.0.1",
-      scalaVersion := "3.3.1",
-      organization := "com.jfranco",
+      name := "tyrian-template-poc",
       libraryDependencies ++= Seq(
         "io.indigoengine" %%% "tyrian-io" % "0.10.0",
         "org.scalameta"   %%% "munit"     % "0.7.29" % Test
@@ -28,10 +24,7 @@ lazy val tyrianuitest =
       ),
       testFrameworks += new TestFramework("munit.Framework"),
       scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) },
-      scalafixOnCompile := true,
-      semanticdbEnabled := true,
-      semanticdbVersion := scalafixSemanticdb.revision,
-      autoAPIMappings   := true
+      autoAPIMappings := true
     )
     .settings( // Welcome message
       logo := List(

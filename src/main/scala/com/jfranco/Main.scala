@@ -4,7 +4,6 @@ import cats.effect.*
 import tyrian.Html.*
 import tyrian.*
 import tyrian.cmds.*
-
 import io.circe.generic.auto.*
 import org.http4s.circe.CirceEntityCodec.*
 import org.http4s.dom.FetchClientBuilder
