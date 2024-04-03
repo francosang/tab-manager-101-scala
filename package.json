@@ -1,16 +1,15 @@
 {
   "source": "src/main/html/index.html",
   "scripts": {
-    "start": "parcel --no-cache --dist-dir dist --log-level info",
-    "build": "parcel build --dist-dir dist --log-level info"
+    "start": "parcel --no-cache --dist-dir dist",
+    "build": "parcel build --dist-dir dist"
   },
   "devDependencies": {
     "parcel": "^2.1.0",
+    "parcel-reporter-clean-dist": "^1.0.4",
     "postcss": "^8.4.38",
     "process": "^0.11.10",
-    "tailwindcss": "^3.4.1"
-  },
-  "dependencies": {
-    "parcel-reporter-clean-dist": "^1.0.4"
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.3"
   }
 }
