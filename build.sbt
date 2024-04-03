@@ -1,12 +1,11 @@
 import scala.language.postfixOps
-
 import sbtwelcome.*
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.5.0"
 
-lazy val root =
+lazy val `app-tyrian-template` =
   (project in file("."))
     .enablePlugins(ScalaJSPlugin)
     .settings( // Normal settings
