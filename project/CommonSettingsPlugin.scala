@@ -34,20 +34,20 @@ object CommonSettingsPlugin extends AutoPlugin {
     tpolecatReleaseModeOptions += ScalacOptions.optimizerWarnings,
     tpolecatExcludeOptions                 := Set.empty,
     Compile / packageDoc / publishArtifact := false,
-    wartremoverErrors ++= Warts.unsafe,
+    wartremoverErrors ++= Warts.allBut(disabledWarts*),
     wartremoverExcluded += sourceManaged.value,
     scalafmtPrintDiff := true,
     excludeDependencies += ExclusionRule("log4j", "log4j")
   )
 
-//  private val disabledWarts = Seq(
-//    Wart.Any,
-//    Wart.DefaultArguments,
-//    Wart.ImplicitParameter,
-//    Wart.Nothing,
-//    Wart.NonUnitStatements,
-//    Wart.Overloading,
-//    Wart.StringPlusAny
-//  )
+  private val disabledWarts = Seq(
+    Wart.Any,
+    Wart.DefaultArguments,
+    Wart.ImplicitParameter,
+    Wart.Nothing,
+    Wart.NonUnitStatements,
+    Wart.Overloading,
+    Wart.StringPlusAny
+  )
 
 }
