@@ -4,8 +4,12 @@
     "start": "parcel --no-cache --dist-dir dist",
     "build": "parcel build --dist-dir dist"
   },
+  "parcel-namer-custom": {
+    "manifest.json$": "[name].[ext]"
+  },
   "devDependencies": {
     "parcel": "^2.1.0",
+    "parcel-namer-custom": "^0.2.0",
     "parcel-reporter-clean-dist": "^1.0.4",
     "postcss": "^8.4.38",
     "process": "^0.11.10",
