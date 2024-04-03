@@ -1,88 +1,49 @@
 package com.jfranco
 
 import cats.effect.*
-import tyrian.Html.*
 import tyrian.*
-import tyrian.cmds.*
-import io.circe.generic.auto.*
-import org.http4s.circe.CirceEntityCodec.*
-import org.http4s.dom.FetchClientBuilder
+import tyrian.Html.*
 
+import scala.scalajs.js
 import scala.scalajs.js.annotation.*
 
 @JSExportTopLevel("Main")
-object Main extends TyrianIOApp[Msg, Model]:
+object Main extends TyrianIOApp[Action, Model]:
 
-  def router: Location => Msg = Routing.none(Msg.NoOp)
+  def router: Location => Action = Routing.none(Action.NoOp)
 
-  def init(flags: Map[String, String]): (Model, Cmd[IO, Msg]) =
-    (Model.init, Cmd.None)
+  def init(flags: Map[String, String]): (Model, Cmd[IO, Action]) =
+    (Model.Empty, Cmd.None)
 
-  def update(model: Model): Msg => (Model, Cmd[IO, Msg]) =
-    case Msg.UpdateRepo(r) =>
-      (
-        model,
-        Cmd.SideEffect {
-          IO.println(s"Repo updated to $r")
-        } |+| Logger.info(r)
-      )
+  def update(model: Model): Action => (Model, Cmd[IO, Action]) =
+    case Action.NoOp        => (model, Cmd.None)
+    case Action.DoSomething => (doSomething(), Cmd.None)
 
-    case Msg.FetchStars =>
-      (
-        model.copy(stargazersResult = "fetching..."),
-        Http4sHelper.fetchStars(model.repo)
-      )
+  def doSomething(): Model =
+    Model.Value("Tete")
 
-    case Msg.Stars(res) =>
-      (model.copy(stargazersResult = res), Cmd.None)
-
-    case Msg.NoOp =>
-      (model, Cmd.None)
-
-  def view(model: Model): Html[Msg] =
+  def view(model: Model): Html[Action] =
     div(
       div(
-        h1(cls := "text-3xl font-bold underline")("Http4s Stars"),
-        p(cls := "underline")("How many stars?"),
-        br,
-        input(
-          placeholder := "http4s/http4s",
-          onInput(s => Msg.UpdateRepo(s))
+        h1(cls := "text-3xl font-bold underline")(
+          s"Http4s Stars"
         ),
-        button(onClick(Msg.FetchStars))("Fetch")
-      ),
-      div(p(model.stargazersResult))
+        button(onClick(Action.DoSomething))("Do something"),
+        model match
+          case Model.Empty        => p("")
+          case Model.Value(value) => p(cls := "text-1xl")(value)
+      )
     )
 
-  def subscriptions(model: Model): Sub[IO, Msg] =
+  def subscriptions(model: Model): Sub[IO, Action] =
     Sub.None
 
-final case class Model(repo: String, stargazersResult: String)
+sealed abstract class Action
+object Action:
+  case object NoOp        extends Action
+  case object DoSomething extends Action
+
+sealed abstract class Model
 object Model:
-  val init: Model =
-    Model("http4s/http4s", "")
-
-enum Msg:
-  case FetchStars
-  case UpdateRepo(repo: String)
-  case Stars(result: String)
-  case NoOp
-
-object Http4sHelper:
-
-  final private case class Repo(stargazers_count: Int)
-
-  def fetchStars(repoName: String): Cmd[IO, Msg] =
-
-    val client = FetchClientBuilder[IO].create
-
-    val fetchRepo: IO[String] =
-      client
-        .expect[Repo](s"https://api.github.com/repos/$repoName")
-        .attempt
-        .map {
-          case Right(Repo(stars)) => s"$stars ★"
-          case Left(_)            => s"Not found :("
-        }
-
-    Cmd.Run(IO.println(s"Fetching stars...") *> fetchRepo)(s => Msg.Stars(s))
+  case object Empty                     extends Model
+  final case class Value(value: String) extends Model
