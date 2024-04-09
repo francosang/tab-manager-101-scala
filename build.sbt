@@ -1,9 +1,26 @@
 import scala.language.postfixOps
 import sbtwelcome.*
 
+import scala.sys.process.*
+
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.5.0"
+
+lazy val npmBuild = taskKey[Unit]("NPM build")
+npmBuild := {
+  "npm install" #&& "npm build" !
+}
+
+lazy val npmStart = taskKey[Unit]("NPM start")
+npmStart := {
+  "npm install" #&& "npm start" !
+}
+
+lazy val start = taskKey[Unit]("Start live compile and frontend dev server")
+start := {
+  npmStart.value
+  (Compile / fastLinkJS).value
+}
 
 lazy val `app-tyrian-template` =
   (project in file("."))
