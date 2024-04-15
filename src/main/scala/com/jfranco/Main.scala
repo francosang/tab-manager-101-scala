@@ -1,8 +1,7 @@
 package com.jfranco
 
 import cats.effect.*
-import com.jfranco.browser.Browser
-import com.jfranco.model.Tab
+import com.jfranco.browser.{Browser, Tab}
 import tyrian.*
 import tyrian.Html.*
 
